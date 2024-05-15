@@ -2,10 +2,12 @@
   <div>
     <h1>Current GPA Calculator</h1>
     <form>
-      <div class="grade-row">
-        <label id="credit">Total Credits</label>
-        <div v-for="(grade, index) in grades" :key="index" class="grade-input">
-          <label :for="grade">{{ grade }}:</label>
+      <div>
+        <div v-for="(grade, index) in grades" :key="index" class="grade-row">
+          <label v-if="index === 0" id="credit">Total Credits</label>
+          <label v-if="index === 0" id="num-eq">Number Equivlent</label>
+          <label v-if="index === 0" id="point-per-grade">Points per Grade</label>
+          <label :for="grade" class="grade-label">{{ grade }}:</label>
           <input
             :id="grade"
             v-model.number="gradeValues[grade]"
@@ -13,7 +15,10 @@
             step="1"
             min="0"
             required
+            class="grade-input"
           />
+          <input class="num-eq" readonly />
+          <input class="point-per-grade" readonly />
         </div>
       </div>
     </form>
@@ -45,20 +50,41 @@ export default {
 
 <style scoped>
 .grade-row {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 50px repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 0.5rem;
+}
+.grapde-label {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  margin-bottom: 1rem;
+}
+.grade-input {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  align-items: center;
+}
+.point-per-grade {
+  grid-column-start: 4;
 }
 
-.grade-input {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 1rem;
+.num-eq {
+  grid-column-start: 3;
+  height: 2.5rem;
 }
 
 #credit {
+  grid-column-start: 2;
   margin-bottom: 1rem;
-  margin-left: auto;
+}
+
+#num-eq {
+  grid-column-start: 3;
+  margin-bottom: 1rem;
+}
+
+#point-per-grade {
+  grid-column-start: 4;
+  margin-bottom: 1rem;
 }
 </style>
