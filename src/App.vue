@@ -1,7 +1,21 @@
-<template>
-  <header></header>
+<script setup>
+import { ref } from 'vue'
+import CurrentGPACalc from './components/CurrentGPACalc.vue'
+import FutureGPACalc from './components/FutureGPACalc.vue'
 
-  <main>:D</main>
+const calculatorType = ref('current')
+</script>
+
+<template>
+  <header>
+    <button @click="calculatorType = 'current'">Current GPA Calculator</button>
+    <button @click="calculatorType = 'future'">Future GPA Calculator</button>
+  </header>
+
+  <main>
+    <CurrentGPACalc v-if="calculatorType === 'current'" />
+    <FutureGPACalc v-else />
+  </main>
 </template>
 
 <style scoped>
