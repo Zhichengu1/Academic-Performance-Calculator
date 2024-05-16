@@ -7,20 +7,37 @@ const calculatorType = ref('current')
 </script>
 
 <template>
-  <header>
-    <button @click="calculatorType = 'current'">Current GPA Calculator</button>
-    <button @click="calculatorType = 'future'">Future GPA Calculator</button>
-  </header>
-
   <main>
-    <CurrentGPACalc v-if="calculatorType === 'current'" />
-    <FutureGPACalc v-else />
+    <div id="container">
+      <button @click="calculatorType = 'current'" class="btn btn-primary btn-ghost" id="cGPA">
+        Current GPA Calculator
+      </button>
+      <button @click="calculatorType = 'future'" class="btn btn-primary btn-ghost" id="fGPA">
+        Future GPA Calculator
+      </button>
+
+      <div id="calculator">
+        <CurrentGPACalc v-if="calculatorType === 'current'" />
+        <FutureGPACalc v-else />
+      </div>
+    </div>
   </main>
 </template>
+
+<style scoped lang="scss">
+@import 'https://cdn.jsdelivr.net/gh/alphardex/aqua.css@master/dist/aqua.min.css';
+</style>
 
 <style scoped>
 header {
   line-height: 1.5;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
 }
 
 .logo {
@@ -43,6 +60,57 @@ header {
     display: flex;
     place-items: flex-start;
     flex-wrap: wrap;
+  }
+}
+
+#container {
+  width: 50rem;
+  display: grid;
+  grid-template-columns: repeat(autofill, minmax(300px, 1fr));
+  grid-column-gap: 1rem;
+}
+
+#cGPA {
+  grid-column-start: 1;
+  margin: 1rem;
+  max-height: 80px;
+}
+
+#fGPA {
+  grid-column-start: 2;
+  margin: 1rem;
+  max-height: 80px;
+}
+
+#calculator {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+.btn {
+  padding: 8px 20px;
+  border-radius: 20px;
+  overflow: hidden;
+
+  &::before {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, var(--primary-color), transparent);
+    transform: translateX(-100%);
+    transition: 0.6s;
+  }
+
+  &:hover {
+    background: transparent;
+    box-shadow: 0 0 20px 10px hsla(204, 70%, 53%, 0.5);
+
+    &::before {
+      transform: translateX(100%);
+    }
   }
 }
 </style>
