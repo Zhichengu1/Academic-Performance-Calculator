@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="background-color: var(--color-background-soft); border-radius: 15px; padding: 20px">
     <h1 style="text-align: center">Current GPA Calculator</h1>
     <form>
       <div>
@@ -17,8 +17,8 @@
             required
             class="grade-input"
           />
-          <input class="num-eq-box" readonly />
-          <input class="point-per-grade-box" readonly />
+          <input class="num-eq-box" readonly tabindex="-1" v-model.number="numEq[grade]" />
+          <input class="point-per-grade-box" readonly tabindex="-1" />
         </div>
       </div>
     </form>
@@ -41,6 +41,19 @@ export default {
         'C-': 0,
         'D+': 0,
         D: 0,
+        F: 0
+      },
+      numEq: {
+        A: 4.0,
+        'A-': 3.7,
+        'B+': 3.3,
+        B: 3.0,
+        'B-': 2.7,
+        'C+': 2.3,
+        C: 2.0,
+        'C-': 1.7,
+        'D+': 1.3,
+        D: 1.0,
         F: 0
       }
     }
@@ -68,7 +81,7 @@ export default {
   font-size: 1rem;
   border-radius: 15px;
   margin-bottom: 5px;
-  background-color: var(--vt-c-black-soft);
+  background-color: var(--color-background-mute);
   border: none;
   color: var(--vt-c-text-dark-2);
   text-align: center;
