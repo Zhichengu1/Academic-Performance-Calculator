@@ -7,6 +7,12 @@
         <input id="gpa" v-model.number="gpa" type="number" step="0.01" min="0" max="4" required />
       </div>
       <div>
+        <label for="credits">Credits of F, I/F, and N/F Grades</label>
+      </div>
+      <div>
+        <label for="credits">Credits of P and S Grades</label>
+      </div>
+      <div>
         <label for="credits">Total Credits:</label>
         <input id="credits" v-model.number="credits" type="number" min="0" required />
       </div>
@@ -31,4 +37,5 @@ export default {
     }
   }
 }
+
 </script>
