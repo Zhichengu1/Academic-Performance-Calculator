@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Future GPA Calculator</h1>
+    <h1 style = "text-align: center" >Future GPA Calculator</h1>
     <form @submit.prevent="calculateGPA">
       <div>
         <label for="gpa">Future GPA:</label>
