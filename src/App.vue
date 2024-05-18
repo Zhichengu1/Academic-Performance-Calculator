@@ -91,6 +91,7 @@ main {
   padding: 8px 20px;
   border-radius: 20px;
   overflow: hidden;
+  min-height: 80px;
 
   &::before {
     position: absolute;
