@@ -54,6 +54,10 @@ export default {
     calculateCredit()
     {
       let total_credit = this.credit_input[0]+ this.credit_input[1]+ this.credit_input[2] - this.credit_input[3] - this.credit_input[4];
+      if(total_credit < 0)
+      {
+        return "Total credit can not be negative.";
+      }
       return total_credit;
     }
   }
@@ -71,15 +75,13 @@ input
 }
 .display_total
 {
+  width: auto;
   height: 35px;
-  background-color: var(--color-background-mute);
   color: var(--vt-c-text-dark-2);
-  border-color: transparent;
   text-align: center;
-  margin-right: 100%;
+  background-color: var(--color-background-soft); 
   border:outset;
-  animation: pulse 3s infinite;
-
+  animation: credit_pal 3s infinite;
 }
 input:hover
 {
@@ -123,5 +125,19 @@ input[type="number"]::-webkit-outer-spin-button {
   70% {
     border-color: #696969; /* Dim Gray */
   }
+}
+@keyframes credit_pal
+{
+  0%, 50% {
+    border-color: #556B2F;
+  }
+   30% {
+    border-color: #98FB98;
+  }
+  50% {
+    border-color: #8FBC8F;
+  }
+
+
 }
 </style>
