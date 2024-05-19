@@ -4,7 +4,7 @@
     <form @submit.prevent="calculateGPA">
     <table>
     <tr>
-      <td style = "color:black; background-color: lightgray; border-radius: 15px;">I. Total credits used to calculate your cumulative GPA</td>
+      <td style = "color: lightsteelblue; background-color: var(--color-background-mute); border-radius: 15px;">I. Total credits used to calculate your cumulative GPA</td>
     </tr>
     <tr v-for="(label, index) in labels" :key="index">
       <td><input class = "animation" :id="'credit_input' + index" placeholder="0" v-model.number="credit_input[index]" type="number" min="0" required /></td>
@@ -12,20 +12,24 @@
     </tr>
     <tr>
       <td class ="display_total">{{calculateCredit()}}</td>
-      <td>:Total GPA credits*</td>
+      <td>:Total Earned GPA Credits*</td>
     </tr>
     </table>
-    <div style = "color:black; background-color: lightgray; border-radius: 15px; margin-right: 500px;">II. Calculating Your Cumulative GPA</div>
+    <div style = "color:lightsteelblue; background-color: var(--color-background-mute); border-radius: 15px; margin-right: 500px;">II. Calculating Your Cumulative GPA</div>
     <div class ="grid-columns">
     <div v-for = "(label, index) in labels_gpa" :key="index">
       <label for = "'gpa_input' + index"> {{label}} </label>
-      <input :id = "'gpa_input' + index" placeholder="0" v-model.number = "gpa_input['gpa_input' + index]" type="number" min="0" required />
+      <input v-if = "index == 1 || index == 3 || index ==4 " :id = "'gpa_input' + index" placeholder="0" v-model.number = "gpa_input[index]" type="number" min="0" required />
+      <input v-else  :id = "'gpa_input' + index" placeholder="0" :value = "calculatedGPA[index]" type="number" min="0" style="border: outset; animation: credit_pal 3s infinite" disabled/>
     </div>
-    </div>
+  </div>
+  <div class ="final_result">  
+    <p v-if="total_credit !== null">Your Anticipated GPA is: {{ anticipatedGpa() }}</p>
+  </div>
   </form>
   </div>
-<p v-if="result !== null">Your current GPA is: {{ result }}</p>
 </template>
+
 <script>
 export default {
   data() {
@@ -34,23 +38,58 @@ export default {
       credit_input: [0,0,0,0,0],
       labels_gpa: 
       [
-        'Enter current GPA credits:', 
+        'Current GPA credits:', 
         'Enter current quality points:', 
         'Display current GPA:', 
-        'Enter anticipated credits:', 
-        'Enter future quality points:', 
-        'Display future GPA:', 
-        'Enter overall credits:', 
-        'Enter total quality points', 
-        'Display overall GPA'
+        'Future credits:', 
+        'Enter Future quality points:', 
+        'Display Future GPA:', 
+        'Overall credits:', 
+        'Total quality points:', 
+        'Display overall Quality Point:'
       ],
-      gpa_input: [],
+      gpa_input: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      total_credit: 0,
+      anticipated_gpa: 0,
+      credit_8: 0,
+      grade_6: 0
     }
   },
+  computed: {
+    calculatedGPA() {
+      return this.labels_gpa.map((label, index) => 
+      {
+        let result = 0;
+        switch(index) {
+          case 0:
+            result = this.calculateCredit() + this.gpa_input[4];
+            this.gpa_input[0] = result;
+            this.grade_6 = result;
+            break;
+          case 6:
+            result = this.gpa_input[0] + this.gpa_input[3];
+            this.gpa_input[6] = result;
+            break;
+          case 2:
+            result = this.gpa_input[0] * this.gpa_input[1];
+            this.gpa_input[2] = result;
+            this.credit_8 = result;
+            break;
+          case 5:
+            result = this.gpa_input[3] * this.gpa_input[4];
+            this.gpa_input[5] = result;
+            break;
+          case 8:
+            result = this.gpa_input[2] + this.gpa_input[5];
+            this.gpa_input[8] = result;
+            break;
+          default:
+            result = this.gpa_input[1] * this.gpa_input[4];
+    }
+    return result;});
+}
+  },
   methods: {
-    calculateGPA() {
-      this.result = this.gpa
-    },
     calculateCredit()
     {
       let total_credit = this.credit_input[0]+ this.credit_input[1]+ this.credit_input[2] - this.credit_input[3] - this.credit_input[4];
@@ -59,8 +98,12 @@ export default {
         return "Total credit can not be negative.";
       }
       return total_credit;
+    },
+    anticipatedGpa()
+    {
+      return this.gpa_input[8]/this.gpa_input[6];
     }
-  }
+  }  
 }
 </script>
 <style>
@@ -90,12 +133,19 @@ input:hover
 .grid-columns { 
     display: grid; 
     grid-template-columns: repeat(3, 1fr); /* Change this line */
+    padding-bottom:20px;
 }
 table
 {
   border-width: auto;
   padding-bottom: 1rem;
   padding-top: 1rem;
+}
+.final_result
+{
+  border: 2px outset;
+  animation: credit_pal 3s infinite;
+  text-align: center;
 }
 input[type="number"]::-webkit-inner-spin-button, 
 input[type="number"]::-webkit-outer-spin-button { 
@@ -112,6 +162,7 @@ input[type="number"]::-webkit-outer-spin-button {
   border: outset;
   animation: pulse 10s infinite;
 }
+
 @keyframes pulse {
   0%, 100% {
     border-color: black; /* Light Gray */
@@ -137,7 +188,5 @@ input[type="number"]::-webkit-outer-spin-button {
   50% {
     border-color: #8FBC8F;
   }
-
-
 }
 </style>
