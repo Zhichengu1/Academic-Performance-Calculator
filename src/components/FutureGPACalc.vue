@@ -7,19 +7,19 @@
       <td style = "color:black; background-color: lightgray; border-radius: 15px;">I. Total credits used to calculate your cumulative GPA</td>
     </tr>
     <tr v-for="(label, index) in labels" :key="index">
-      <td><input class = "animation" :id="'credit_input' + index" v-model.number="credit_input['credit_input' + index]" type="number" min="0" required /></td>
+      <td><input class = "animation" :id="'credit_input' + index" placeholder="0" v-model.number="credit_input[index]" type="number" min="0" required /></td>
       <td>{{ label }}</td>
     </tr>
     <tr>
-      <td>output</td>
-      <td>Total GPA credits*</td>
+      <td class ="display_total">{{calculateCredit()}}</td>
+      <td>:Total GPA credits*</td>
     </tr>
     </table>
     <div style = "color:black; background-color: lightgray; border-radius: 15px; margin-right: 500px;">II. Calculating Your Cumulative GPA</div>
     <div class ="grid-columns">
     <div v-for = "(label, index) in labels_gpa" :key="index">
       <label for = "'gpa_input' + index"> {{label}} </label>
-      <input :id = "'gpa_input' + index" v-model.number = "gpa_input['gpa_input' + index]" type="number" min="0" required />
+      <input :id = "'gpa_input' + index" placeholder="0" v-model.number = "gpa_input['gpa_input' + index]" type="number" min="0" required />
     </div>
     </div>
   </form>
@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       labels: [':Enter TOTAL earned credits:', ':Enter repeated credits NOT earned.', ':Enter TOTAL credits of F, I/F, and N/F grades', ':Enter TOTAL credits of P and S grades', ':Enter TOTAL transfer and test(AP, CLEP, CPE)'],
-      credit_input: {},
+      credit_input: [0,0,0,0,0],
       labels_gpa: 
       [
         'Enter current GPA credits:', 
@@ -44,11 +44,7 @@ export default {
         'Enter total quality points', 
         'Display overall GPA'
       ],
-      gpa_input: {},
-      gpa: null,
-      earn_credits: null,
-      total_credit: null,
-      result: null
+      gpa_input: [],
     }
   },
   methods: {
@@ -57,12 +53,12 @@ export default {
     },
     calculateCredit()
     {
-      this.total_credit = this.earn_credits
+      let total_credit = this.credit_input[0]+ this.credit_input[1]+ this.credit_input[2] - this.credit_input[3] - this.credit_input[4];
+      return total_credit;
     }
   }
 }
 </script>
-
 <style>
 input
 {
@@ -71,6 +67,19 @@ input
   background-color: var(--color-background-mute);
   color: var(--vt-c-text-dark-2);
   border-color: transparent;
+  text-align: center;
+}
+.display_total
+{
+  height: 35px;
+  background-color: var(--color-background-mute);
+  color: var(--vt-c-text-dark-2);
+  border-color: transparent;
+  text-align: center;
+  margin-right: 100%;
+  border:outset;
+  animation: pulse 3s infinite;
+
 }
 input:hover
 {
