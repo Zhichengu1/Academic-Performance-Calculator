@@ -225,14 +225,15 @@ input[type='number']::-webkit-outer-spin-button {
 }
 @keyframes credit_pal {
   0%,
-  50% {
+  100% {
     border-color: #556b2f;
   }
-  30% {
-    border-color: #98fb98;
+  30%,
+  80% {
+    border-color: #8fbc8f;
   }
   50% {
-    border-color: #8fbc8f;
+    border-color: #98fb98;
   }
 }
 </style>
