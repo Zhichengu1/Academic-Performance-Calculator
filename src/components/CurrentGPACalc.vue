@@ -98,7 +98,7 @@ export default {
     border-color: var(--vt-c-black-soft);
   }
   50% {
-    border-color: var(--vt-c-text-dark-2);
+    border-color: var(--color-primary-200);
   }
   100% {
     border-color: var(--vt-c-black-soft);
@@ -108,7 +108,8 @@ export default {
 .grade-input:focus {
   outline: none;
   animation: border-pulse 2s infinite;
-  border-bottom: 2px solid;
+  border-bottom: 3px solid;
+  background-color: var(--color-surface-mixed-250);
 }
 
 .grade-input {

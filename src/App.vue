@@ -106,7 +106,8 @@ main {
   }
 
   &:hover {
-    background: transparent;
+    background: var(--primary-color);
+    transition: background 0.8s ease;
     box-shadow: 0 0 20px 10px hsla(204, 70%, 53%, 0.5);
 
     &::before {
