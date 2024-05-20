@@ -17,8 +17,14 @@
             required
             class="grade-input"
           />
-          <input class="num-eq-box" readonly tabindex="-1" v-model.number="numEq[grade]" />
-          <input class="point-per-grade-box" :value = "totalPoints" readonly tabindex="-1" />
+          <input
+            class="num-eq-box"
+            readonly
+            tabindex="-1"
+            v-model.number="numEq[grade]"
+            :style="{ backgroundColor: numEqColor[grade] }"
+          />
+          <input class="point-per-grade-box" :value="totalPoints" readonly tabindex="-1" />
         </div>
       </div>
     </form>
@@ -55,18 +61,31 @@ export default {
         'D+': 1.3,
         D: 1.0,
         F: 0
+      },
+      numEqColor: {
+        A: '#1c522a',
+        'A-': '#265429',
+        'B+': '#385827',
+        B: '#4c5d24',
+        'B-': '#676021',
+        'C+': '#684e22',
+        C: '#684d22',
+        'C-': '#683e23',
+        'D+': '#683b23',
+        D: '#692e24',
+        F: '#692424'
       }
     }
   },
   computed: {
     totalPoints() {
-      let result = 0;
-      let grades = Object.keys(this.gradeValues);
-      for(let i = 0; i < grades.length; i++) {
-        let grade = grades[i];
-        result += this.gradeValues[grade] * this.numEq[grade];
+      let result = 0
+      let grades = Object.keys(this.gradeValues)
+      for (let i = 0; i < grades.length; i++) {
+        let grade = grades[i]
+        result += this.gradeValues[grade] * this.numEq[grade]
       }
-      return result;
+      return result
     }
   }
 }

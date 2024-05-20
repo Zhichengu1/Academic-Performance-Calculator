@@ -157,7 +157,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 input {
   width: auto;
   height: 35px;
