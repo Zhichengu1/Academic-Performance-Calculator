@@ -18,7 +18,7 @@
             class="grade-input"
           />
           <input class="num-eq-box" readonly tabindex="-1" v-model.number="numEq[grade]" />
-          <input class="point-per-grade-box" readonly tabindex="-1" />
+          <input class="point-per-grade-box" :value = "totalPoints" readonly tabindex="-1" />
         </div>
       </div>
     </form>
@@ -56,6 +56,17 @@ export default {
         D: 1.0,
         F: 0
       }
+    }
+  },
+  computed: {
+    totalPoints() {
+      let result = 0;
+      let grades = Object.keys(this.gradeValues);
+      for(let i = 0; i < grades.length; i++) {
+        let grade = grades[i];
+        result += this.gradeValues[grade] * this.numEq[grade];
+      }
+      return result;
     }
   }
 }
