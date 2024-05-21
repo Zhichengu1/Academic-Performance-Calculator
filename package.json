@@ -1,7 +1,7 @@
 {
-  "name": "electron-vue-template",
+  "name": "GPACalc",
   "version": "0.1.0",
-  "description": "A minimal Electron + Vue application",
+  "description": "Stony Brook GPA calc",
   "main": "main/main.js",
   "scripts": {
     "dev": "node scripts/dev-server.js",
@@ -10,6 +10,9 @@
     "build:win": "node scripts/build.js && electron-builder --win",
     "build:mac": "node scripts/build.js && electron-builder --mac",
     "build:linux": "node scripts/build.js && electron-builder --linux"
+  },
+  "author": {
+    "name": "Huajie/Zhicheng"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.4.1",
@@ -21,7 +24,6 @@
     "vite": "^4.5.0"
   },
   "dependencies": {
-    "sass": "^1.77.2",
     "vue": "^3.3.8"
   }
 }
