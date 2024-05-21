@@ -1,18 +1,23 @@
-import { fileURLToPath, URL } from 'node:url'
+const Path = require('path');
+const vuePlugin = require('@vitejs/plugin-vue')
 
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import VueDevTools from 'vite-plugin-vue-devtools'
+const { defineConfig } = require('vite');
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    vue(),
-    VueDevTools(),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
-  }
-})
+/**
+ * https://vitejs.dev/config
+ */
+const config = defineConfig({
+    root: Path.join(__dirname, 'src', 'renderer'),
+    publicDir: 'public',
+    server: {
+        port: 8080,
+    },
+    open: false,
+    build: {
+        outDir: Path.join(__dirname, 'build', 'renderer'),
+        emptyOutDir: true,
+    },
+    plugins: [vuePlugin()],
+});
+
+module.exports = config;
