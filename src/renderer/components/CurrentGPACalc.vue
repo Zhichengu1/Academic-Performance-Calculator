@@ -4,7 +4,7 @@
     <form>
       <div>
         <div v-for="(grade, index) in grades" :key="index" class="grade-row">
-          <label v-if="index === 0" id="credit">Total Credits</label>
+          <label v-if="index === 0" id="credit">Credits</label>
           <label v-if="index === 0" id="num-eq">Number Equivlent</label>
           <label v-if="index === 0" id="point-per-grade">Points per Grade</label>
           <label :for="grade" class="grade-label">{{ grade }}</label>
@@ -17,8 +17,40 @@
             required
             class="grade-input"
           />
-          <input class="num-eq-box" readonly tabindex="-1" v-model.number="numEq[grade]" />
-          <input class="point-per-grade-box" :value = "totalPoints" readonly tabindex="-1" />
+          <input
+            class="num-eq-box"
+            readonly
+            tabindex="-1"
+            v-model.number="numEq[grade]"
+            :style="{ backgroundColor: numEqColor[grade] }"
+          />
+          <input
+            class="point-per-grade-box"
+            :value="PointsPerGrade(grade)"
+            readonly
+            tabindex="-1"
+          />
+        </div>
+        <br />
+        <div class="output">
+          <label style="grid-column-start: 1; grid-column-end: 2; text-align: left">
+            Total Credits:
+          </label>
+          <input
+            class="output-cell"
+            :value="totalCredits"
+            readonly
+            tabindex="-1"
+            style="grid-column-start: 2; grid-column-end: 3"
+          />
+          <label style="grid-column-start: 3; grid-column-end: 4; text-align: right"> GPA: </label>
+          <input
+            class="output-cell"
+            :value="totalPoints"
+            readonly
+            tabindex="-1"
+            style="grid-column-start: 4; grid-column-end: 5"
+          />
         </div>
       </div>
     </form>
@@ -55,27 +87,57 @@ export default {
         'D+': 1.3,
         D: 1.0,
         F: 0
+      },
+      numEqColor: {
+        A: '#1c522a',
+        'A-': '#265429',
+        'B+': '#385827',
+        B: '#4c5d24',
+        'B-': '#676021',
+        'C+': '#684e22',
+        C: '#684d22',
+        'C-': '#683e23',
+        'D+': '#683b23',
+        D: '#692e24',
+        F: '#692424'
       }
     }
   },
   computed: {
     totalPoints() {
-      let result = 0;
-      let grades = Object.keys(this.gradeValues);
-      for(let i = 0; i < grades.length; i++) {
-        let grade = grades[i];
-        result += this.gradeValues[grade] * this.numEq[grade];
+      let result = 0
+      let grades = this.grades
+      for (let i = 0; i < grades.length; i++) {
+        result += this.PointsPerGrade(grades[i])
       }
-      return result;
+      return (result / this.totalCredits).toFixed(2)
+    },
+    totalCredits() {
+      let result = 0
+      let grades = this.grades
+      for (let i = 0; i < grades.length; i++) {
+        result += isNaN(parseInt(this.gradeValues[grades[i]]))
+          ? 0
+          : parseInt(this.gradeValues[grades[i]])
+      }
+      return result
+    }
+  },
+  methods: {
+    PointsPerGrade(grade) {
+      return parseFloat(
+        ((this.gradeValues[grade] * Math.floor(this.numEq[grade] * 10)) / 10).toFixed(1)
+      )
     }
   }
 }
 </script>
 
 <style scoped>
-.grade-row {
+.grade-row,
+.output {
   display: grid;
-  grid-template-columns: 35px repeat(3, minmax(60px, 1fr));
+  grid-template-columns: 50px repeat(3, minmax(60px, 1fr));
   grid-gap: 1rem;
 }
 .grapde-label {
@@ -86,7 +148,8 @@ export default {
 
 .grade-input,
 .point-per-grade-box,
-.num-eq-box {
+.num-eq-box,
+.output-cell {
   height: 2.5rem;
   padding: 0 0.5rem;
   font-size: 1rem;
@@ -99,7 +162,8 @@ export default {
 }
 
 .point-per-grade-box,
-.num-eq-box:focus {
+.num-eq-box:focus,
+.output-cell {
   outline: none;
   pointer-events: none;
 }
@@ -109,7 +173,7 @@ export default {
     border-color: var(--vt-c-black-soft);
   }
   50% {
-    border-color: var(--vt-c-text-dark-2);
+    border-color: var(--color-primary-200);
   }
   100% {
     border-color: var(--vt-c-black-soft);
@@ -119,7 +183,8 @@ export default {
 .grade-input:focus {
   outline: none;
   animation: border-pulse 2s infinite;
-  border-bottom: 2px solid;
+  border-bottom: 3px solid;
+  background-color: var(--color-surface-mixed-250);
 }
 
 .grade-input {
