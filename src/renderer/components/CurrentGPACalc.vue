@@ -6,7 +6,7 @@
         <div v-for="(grade, index) in grades" :key="index" class="grade-row">
           <label v-if="index === 0" id="credit">Credits</label>
           <label v-if="index === 0" id="num-eq">Number Equivlent</label>
-          <label v-if="index === 0" id="point-per-grade">Points per Grade</label>
+          <label v-if="index === 0" id="point-per-grade">Points</label>
           <label :for="grade" class="grade-label">{{ grade }}</label>
           <input
             :id="grade"
@@ -24,12 +24,7 @@
             v-model.number="numEq[grade]"
             :style="{ backgroundColor: numEqColor[grade] }"
           />
-          <input
-            class="point-per-grade-box"
-            :value="PointsPerGrade(grade)"
-            readonly
-            tabindex="-1"
-          />
+          <input class="point-per-grade-box" :value="tweenedPoints[grade]" readonly tabindex="-1" />
         </div>
         <br />
         <div class="output">
@@ -46,6 +41,7 @@
           <label style="grid-column-start: 3; grid-column-end: 4; text-align: right"> GPA: </label>
           <input
             class="output-cell"
+            ref="totalPointsInput"
             :value="totalPoints"
             readonly
             tabindex="-1"
@@ -58,6 +54,9 @@
 </template>
 
 <script>
+import { reactive } from 'vue'
+import gsap from 'gsap'
+
 export default {
   data() {
     return {
@@ -100,7 +99,20 @@ export default {
         'D+': '#683b23',
         D: '#692e24',
         F: '#692424'
-      }
+      },
+      tweenedPoints: reactive({
+        A: 0,
+        'A-': 0,
+        'B+': 0,
+        B: 0,
+        'B-': 0,
+        'C+': 0,
+        C: 0,
+        'C-': 0,
+        'D+': 0,
+        D: 0,
+        F: 0
+      })
     }
   },
   computed: {
@@ -128,6 +140,40 @@ export default {
       return parseFloat(
         ((this.gradeValues[grade] * Math.floor(this.numEq[grade] * 10)) / 10).toFixed(1)
       )
+    }
+  },
+  watch: {
+    gradeValues: {
+      handler(newValues) {
+        for (let grade in newValues) {
+          let goal = Math.round(this.PointsPerGrade(grade) * 10)
+          let step = (goal - Math.round(this.tweenedPoints[grade] * 10)) / 10
+          let start = Math.round(this.tweenedPoints[grade] * 10)
+          for (let i = 1; i <= 10; i++) {
+            setTimeout(() => {
+              let add = start + step * i
+              add = Math.round(add)
+              this.tweenedPoints[grade] = add / 10
+            }, i * 30)
+          }
+        }
+      },
+      deep: true
+    },
+    totalPoints() {
+      let element = this.$refs.totalPointsInput
+      let highlight = getComputedStyle(document.documentElement)
+        .getPropertyValue('--primary-color')
+        .trim()
+      let muted = getComputedStyle(document.documentElement)
+        .getPropertyValue('--color-background-mute')
+        .trim()
+      let tl = gsap.timeline()
+
+      tl.to(element, { duration: 0.5, boxShadow: '0 0 20px 10px hsla(204, 70%, 53%, 0.5)' })
+        .to(element, { duration: 1, backgroundColor: highlight }, 0)
+        .to(element, { duration: 1, boxShadow: 'none' })
+        .to(element, { duration: 1, backgroundColor: muted }, '<')
     }
   }
 }
